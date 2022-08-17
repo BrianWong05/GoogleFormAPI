@@ -25,7 +25,7 @@ class form(Base):
     form_id = sa.Column(sa.String, index=True)
     link = sa.Column(sa.String, index=True)
     title = sa.Column(sa.String, index=True)
-    text = sa.Column(sa.String, index=True)
+    text = sa.Column(sa.String, index=False)
     by = sa.Column(sa.String, index=True, default="")
     deleted = sa.Column(sa.Boolean, default=False)
     date = sa.Column(sa.String, default="")
@@ -34,3 +34,10 @@ class form(Base):
         sa.DateTime, default=datetime.datetime.utcnow)
 
     owner = orm.relationship("User", back_populates="fomrs")
+
+class error(Base):
+    __tablename__ = "API Error"
+    id = sa.Column(sa.Integer, primary_key=True, index=True)
+    function = sa.Column(sa.String, index=True)
+    traceback = sa.Column(sa.String, index=False)
+    timestamp = sa.Column(sa.DateTime, default=datetime.datetime.utcnow)

@@ -1,10 +1,12 @@
 import datetime
+import sys
 
 import sqlalchemy.orm as orm
 from fastapi import HTTPException
 from models import models as Models
 from models import schemas as Schemas
 
+currentFuncName = lambda n=0: sys._getframe(n + 1).f_code.co_name
 
 async def db_create_form(user: Schemas.User, db: orm.Session, form: Schemas.FormCreate):
     form = Models.form(**form.dict(), owner_id=user.id)
@@ -58,3 +60,12 @@ async def db_update_form(form_id: str, form: Schemas.FormCreate, user: Schemas.U
     db.commit()
 
     return Schemas.Form.from_orm(form_db)
+
+async def db_upload_error(traceback: str, db: orm.Session):
+    error = Models.error(
+        function = currentFuncName(1),
+        traceback = traceback
+    )
+
+    db.add(error)
+    db.commit()

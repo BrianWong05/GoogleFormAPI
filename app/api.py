@@ -41,8 +41,6 @@ def get_db():
         db.close()
 
 # create GoogleForm
-
-
 @app.get('/getform', status_code=200)
 async def get_form(form_id: str, user: Schemas.User = Depends(Auth.get_current_user)):
     res = Form.get_form(form_id)
@@ -70,8 +68,6 @@ async def gen(form: Schemas.genQuiz, user: Schemas.User = Depends(Auth.get_curre
     return {"id": id, "link": result["responderUri"]}
 
 # Users Authorization
-
-
 @app.post("/user/create", status_code=200)
 async def create_user(user: Schemas.UserCreate, db: orm.Session = Depends(get_db)):
     db_user = await Auth.get_user_by_username(user.username, db)
@@ -137,8 +133,6 @@ async def rss(url: str, limit: int = 999, detail: bool = False, Random: bool = F
     return res
 
 # Summarizer
-
-
 @app.post('/sum')
 def summarize(source: Schemas.summarize_text):
     outputs = Summarize.summarize(source.text, source.percent)
